@@ -1,13 +1,13 @@
 import React from 'react';
 import ExpenseTrackerApp from './ExpenseApp';
 import PrimarySearchAppBar from './AppHeader';
-import Search from './Search';
+//import SearchBar from './searchBar';
 
 const App = () => {
   return (
     <div className='container'>
       <PrimarySearchAppBar />
-      <Search />
+      
       <ExpenseTrackerApp />
       
     </div>

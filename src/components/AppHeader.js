@@ -151,6 +151,8 @@ export default function PrimarySearchAppBar() {
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
             />
+
+
           </Search>
          
             <IconButton
