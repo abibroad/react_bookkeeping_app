@@ -6,11 +6,16 @@ function ExpenseTrackerApp() {
   const [expenses, setExpenses] = React.useState([])
   const [expense, setExpense] = React.useState("")
   const [cost, setCost] = React.useState("")
+  const [isEditingCost, setIsEditingCost] = React.useState(null)
+
+  const [expenseName, setExpenseName] = React.useState("")
+  const [isEditingExpense, setIsEditingExpense] = React.useState(null)
+ 
   const [category, setCategory] = React.useState("")
-  const [expenseEditing, setExpenseEditing] = React.useState(null)
-  const [editingText, setEditingText] = React.useState("")
-  const [costEditing, setCostEditing] = React.useState(null)
-  const [editingCost, setEditingCost] = React.useState("")
+  const [isEditingCategory, setIsEditingCategory] = React.useState(null);
+
+
+  
 
   
   
@@ -67,25 +72,61 @@ function deleteExpense(id) {
 function editExpense(id) {
   const updatedExpenses = [...expenses].map((expense) => {
     if (expense.id === id) {
-      expense.expense = editingText;
+      if (expenseName === "") {
+        expense.expense = expense.expense;
+      } else if (expenseName === "" || expenseName === undefined || expenseName === null) {
+        alert("Please enter a value for the expense.");
+        return false;
+      } else {
+        expense.expense = expenseName;
+      }
     }
     return expense;
   });
   setExpenses(updatedExpenses);
-  setExpenseEditing(null);
-  setEditingText("");
+  setIsEditingExpense(null);
+  setExpenseName("");
 }
+
+
+//a function to edit cost, I've created additional conditional that does not allow inserting negative or 0 values
 
 function editCost(id) {
   const updatedCost = [...expenses].map((expense) => {
     if (expense.id === id) {
-      expense.cost = editingCost;
+      if (cost === "") {
+        expense.cost = expense.cost;
+      } else if (cost <= 0) {
+        alert("Please enter a value for the cost.");
+        return false;
+      } else {
+        expense.cost = cost;
+      }
     }
     return expense;
   });
   setCost(updatedCost);
-  setCostEditing(null);
-  setEditingCost("");
+  setIsEditingCost(null);
+  setCost("");
+}
+
+function editCategory(id) {
+  const updatedExpenses = [...expenses].map((expense) => {
+    if (expense.id === id) {
+      if (category === "") {
+        expense.category = expense.category;
+      } else if (category === "" || category === undefined || category === null) {
+        alert("Please enter a value for the expense.");
+        return false;
+      } else {
+        expense.category = category;
+      }
+    }
+    return expense;
+  });
+  setExpenses(updatedExpenses);
+  setIsEditingCategory(null);
+  setCategory("");
 }
 
 
@@ -94,11 +135,12 @@ function editCost(id) {
 // we added a value={expense} that is to make sure that there is a >two way binding< in our code to avoid bugs 
   return (
     <div className="App">
-      <h1> Expense Tracker App </h1>
+      <br></br>
+      <h2> Enter your details </h2>
       <form onSubmit={addExpense}>
-        <input type="text" placeholder="Enter an expense" onChange={(e) => setExpense(e.target.value)} value={expense}/>
-        <input type="number" placeholder="Enter an cost" onChange={(e) => setCost(e.target.value)} value={cost}/>
-        <input type="text" placeholder="Enter a category" onChange={(e) => setCategory(e.target.value)} value={category}/>
+        <input type="text" placeholder="Expense Name" onChange={(e) => setExpense(e.target.value)} value={expense}/>
+        <input type="number" placeholder="Cost" onChange={(e) => setCost(e.target.value)} value={cost}/>
+        <input type="text" placeholder="Category" onChange={(e) => setCategory(e.target.value)} value={category}/>
         <button type="submit">Add an Expense</button>
       </form>
 
@@ -107,38 +149,50 @@ function editCost(id) {
       {expenses.map((expense) => (
         <li key={expense.id} style={{fontSize: '1.2em'}}>
 
-        {expenseEditing === expense.id ? (
+        {isEditingExpense === expense.id ? (
               <input
                 type="text"
-                onChange={(e) => setEditingText(e.target.value)}
-                value = {editingText}
+                onChange={(e) => setExpenseName(e.target.value)}
+                value = {expenseName}
               />
             ) : (
-              <div>{expense.expense} <span> | </span> </div>
+              <div><b>Expense: </b>{expense.expense} </div>
             )}
 
-        {costEditing === expense.id ? (
+        {isEditingCost === expense.id ? (
               <input
                 type="number"
-                onChange={(e) => setEditingCost(e.target.value)}
-                value = {editingCost}
+                onChange={(e) => setCost(e.target.value)}
+                value = {cost}
               />
             ) : (
-              <div>£{expense.cost} <span> | </span> </div>
+              <div><b>Cost: </b>£{expense.cost}</div>
             )}
 
-          {expense.category} <span> </span>
-          <button onClick={() => deleteExpense(expense.id)}>Delete Expense</button> <span> </span> <br></br>
-          <button onClick={() => setExpenseEditing(expense.id)}>Edit Expense</button>
+            {isEditingCategory === expense.id ? (
+        <input
+          type="text"
+          onChange={(e) => setCategory(e.target.value)}
+          value={category}
+        />
+      ) : (
+        <div><b>Category: </b>{expense.category}</div>
+      )}
+
+     
+
+          <button onClick={() => deleteExpense(expense.id)}>Delete Expense</button> <span> </span>
+          <button onClick={() => setIsEditingExpense(expense.id)}>Edit Expense Name</button>
           <button onClick={() => editExpense(expense.id)}>Submit Expense Edits</button>
-          <button onClick={() => setCostEditing(expense.id)}>Edit Cost</button>
-          <button onClick={() => editCost(expense.id)}>Submit Edit Costs</button>
+          <button onClick={() => setIsEditingCost(expense.id)}>Edit Cost</button>
+          <button onClick={() => editCost(expense.id)}>Submit Cost Edits</button>
+          <button onClick={() => setIsEditingCategory(expense.id)}>Edit Category</button>
+          <button onClick={() => editCategory(expense.id)}>Submit Category Edits</button>
         </li>
       ))}
       </ul>
     </div>
   );
 }
-
 
 export default ExpenseTrackerApp;
