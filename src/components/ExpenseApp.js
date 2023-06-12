@@ -149,7 +149,7 @@ function editCategory(id) {
       </form>
 
       <ul>
-        <h3>Expense | Amount | Category</h3>
+        {/* <h3>Expense | Amount | Category</h3> */}
       {expenses.map((expense) => (
         <li key={expense.id} style={{fontSize: '1.2em'}}>
 
@@ -160,7 +160,7 @@ function editCategory(id) {
                 value = {expenseName}
               />
             ) : (
-              <div><b>Expense: </b>{expense.expense} </div>
+              <div class="result"><b>Expense: </b>{expense.expense} </div>
             )}
 
         {isEditingCost === expense.id ? (
@@ -170,7 +170,7 @@ function editCategory(id) {
                 value = {cost}
               />
             ) : (
-              <div><b>Cost: </b>£{expense.cost}</div>
+              <div class="result"><b>Cost: </b>£{expense.cost}</div>
             )}
 
             {isEditingCategory === expense.id ? (
@@ -180,7 +180,7 @@ function editCategory(id) {
           value={category}
         />
       ) : (
-        <div><b>Category: </b>{expense.category}</div>
+        <div class="result"><b>Category: </b>{expense.category}</div>
       )}
 
      
