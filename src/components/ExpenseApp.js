@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+// import logo from './logo.svg';
 import './App.css';
 
 
@@ -13,6 +14,9 @@ function ExpenseTrackerApp() {
  
   const [category, setCategory] = React.useState("")
   const [isEditingCategory, setIsEditingCategory] = React.useState(null);
+
+  const [totalExpenses, setTotalExpenses] = useState(0);
+  const [categories] = useState([]);
 
 
   
@@ -135,7 +139,7 @@ function editCategory(id) {
 // we added a value={expense} that is to make sure that there is a >two way binding< in our code to avoid bugs 
   return (
     <div className="App">
-      <br></br>
+    <br></br>
       <h2> Enter your details </h2>
       <form onSubmit={addExpense}>
         <input type="text" placeholder="Expense Name" onChange={(e) => setExpense(e.target.value)} value={expense}/>
@@ -191,8 +195,29 @@ function editCategory(id) {
         </li>
       ))}
       </ul>
+      <div>
+        <ul>
+        <h4>Here is a summary of your expenses:</h4>
+          <li>
+          Total Expenses: <b>£</b><span id="total-expenses"><b>{totalExpenses}</b></span>
+          </li>
+          <li>
+            Amount of categories: <b>{categories.length}</b>
+          </li>
+          {categories.map((category) => (
+            <li key={category}>
+              Total items for <b>{category}</b> is: <b>{expenses.filter((expense) => expense.category === category).length}</b>
+              <span> | </span>
+              Total expenses for <b>{category}</b> is: <b>£</b><span><b>{expenses.filter((expense) => expense.category === category).reduce((a, b) => a + b.amount, 0)}</b></span>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
+    
   );
+  
 }
+
 
 export default ExpenseTrackerApp;
